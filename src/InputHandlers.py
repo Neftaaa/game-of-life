@@ -43,7 +43,7 @@ class ClickHandler:
             self.inputs[1] = grid_pos
 
         if clicks[0]:
-            return 1, grid_pos
+            return 1, grid_pos, pos
 
         elif clicks[2]:
-            return 0, grid_pos
+            return 0, grid_pos, pos

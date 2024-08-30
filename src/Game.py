@@ -6,6 +6,7 @@ from src.InputHandlers import KeyHandler, ClickHandler
 
 class Game:
     def __init__(self):
+        self.exit_rect = None
         self.show_hud = True
         self.frame_counter = 0
         self.click_handler = ClickHandler
@@ -83,6 +84,12 @@ class Game:
         speed_label_rect.bottomleft = (10, self.res[1] - 10)
         self.screen.blit(speed_label, speed_label_rect)
 
+        exit_label = font.render("×", True, self.OBJECTS_COLOR, self.BG_COLOR)
+        exit_label_rect = exit_label.get_rect()
+        exit_label_rect.topright = (self.res[0] - 10, 2)
+        self.screen.blit(exit_label, exit_label_rect)
+        self.exit_rect = exit_label_rect
+
     def get_live_neighbors(self, x, y):
         alive_neighbors = 0
         for i in range(-1, 2):
@@ -126,7 +133,12 @@ class Game:
             click = self.click_handler.handle_click(self.rect_grid)
 
             if click is not None:
-                self.grid[click[1][1]][click[1][0]] = click[0]
+
+                if self.exit_rect.collidepoint(click[2][0], click[2][1]) and self.show_hud:
+                    self.running = False
+
+                else:
+                    self.grid[click[1][1]][click[1][0]] = click[0]
 
         elif self.frame_counter % (self.fps_cap // self.game_speed) == 0:
             new_grid = []
