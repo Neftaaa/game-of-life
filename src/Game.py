@@ -69,7 +69,7 @@ class Game:
                     pg.draw.rect(self.screen, self.OBJECTS_COLOR, column, 1)
                 new_rect_grid_row.append(new_rect_grid_row)
 
-            self.rect_grid = new_rect_grid
+            self.recct_grid = new_rect_grid
 
     def draw_hud(self):
 
@@ -86,16 +86,17 @@ class Game:
 
         exit_label = font.render("×", True, self.OBJECTS_COLOR, self.BG_COLOR)
         exit_label_rect = exit_label.get_rect()
-        exit_label_rect.topright = (self.res[0] - 10, 2)
+        exit_label_rect.topright = (self.res[0] - 5, 0)
         self.screen.blit(exit_label, exit_label_rect)
         self.exit_rect = exit_label_rect
 
     def get_live_neighbors(self, x, y):
-        alive_neighbors = 0
+        alive_neighbors = []
         for i in range(-1, 2):
             for j in range(-1, 2):
                 if not (i == 0 and j == 0):
-                    alive_neighbors += self.grid[((y + i) % self.grid_res_y)][((x + j) % self.grid_res_x)]
+                    if self.grid[((y + i) % self.grid_res_y)][((x + j) % self.grid_res_x)]:
+                        alive_neighbors.append((x + j, y + i))
         return alive_neighbors
 
     def update(self):
@@ -130,7 +131,7 @@ class Game:
                 self.game_speed += 1
 
         if not self.progress:
-            click = self.click_handler.handle_click(self.rect_grid)
+            click = self.click_handler.handle_click()
 
             if click is not None:
 
@@ -147,7 +148,7 @@ class Game:
                 new_row = []
 
                 for x in range(self.grid_res_x):
-                    alive_neighbors = self.get_live_neighbors(x, y)
+                    alive_neighbors = len(self.get_live_neighbors(x, y))
 
                     if self.grid[y][x] == 0:
                         if alive_neighbors == 3:

@@ -34,7 +34,7 @@ class ClickHandler:
     def set_tile_size(self, tile_size):
         self.tile_size = tile_size
 
-    def handle_click(self, rect_grid: [[pygame.Rect]]):
+    def handle_click(self):
         clicks = pygame.mouse.get_pressed()
         pos = pygame.mouse.get_pos()
         grid_pos = (pos[0] // self.tile_size, pos[1] // self.tile_size)
